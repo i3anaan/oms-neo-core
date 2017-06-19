@@ -18,6 +18,7 @@ Hereby your credential information for MyAEGEE - OMS:
 Please keep this information savely stored.
 Once your account has been approved and activated by an admin, you will receive your personal Microsoft Office 365 @member.aegee.eu account.
 
+You do not have to do anything with these credentials just yet. For now wait on admin approval after which you will receive a new email.
 
 Proud to bring this to you,
 ~The MyAEGEE team

@@ -101,7 +101,9 @@ class LoginController extends Controller
 
         Auth::login($user);
 
+
+        return redirect('/');
         // Login successful.. returning data..
-        return response()->success($loginKey, null, 'User login token');
+        //return response()->success($loginKey, null, 'User login token');
     }
 }
