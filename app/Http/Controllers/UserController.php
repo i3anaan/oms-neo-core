@@ -10,6 +10,7 @@ use Excel;
 use Session;
 use Response;
 use Auth;
+use Log;
 use App\Http\Requests;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\AddBodyToUserRequest;
@@ -25,6 +26,7 @@ use App\Models\Country;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use App\Contracts\OnlineBusinessEnvironment as OBE;
+use App\Proxies\MailProxy;
 
 class UserController extends Controller
 {
@@ -78,11 +80,17 @@ class UserController extends Controller
     }
 
     public function createUser(CreateUserRequest $req) {
-        //dump($req->session()->get('errors'));
         $arr = $this->getUpdateArray($req, ['address_id', 'first_name', 'last_name', 'date_of_birth', 'personal_email', 'gender', 'phone', 'description', 'password']);
+
+        if (empty($req->password)) {
+            $req->password = str_random(8);
+        }
+
         $arr['password'] = Hash::make($req->password);
         $user = User::create($arr);
-        //dump($req->session()->get('errors'));
+
+
+        $mailProxy = new MailProxy();
         return response()->success($user, null, 'User created');
     }
 
