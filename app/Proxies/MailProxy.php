@@ -16,6 +16,10 @@ Hereby your credential information for MyAEGEE - OMS:
     Password: $password
 
 Please keep this information savely stored.
+Once your account has been approved and activated by an admin, you will receive your personal Microsoft Office 365 @member.aegee.eu account.
+
+
+Proud to bring this to you,
 ~The MyAEGEE team
 ";
 
@@ -33,9 +37,11 @@ Hereby your credential information for your new Microsoft Office 365 account:
     Username: $username
     Password: $password
 
+Please keep this information savely stored.
 You can login at https://portal.office.com, you will be asked to change your password on your first login.
 
-Please keep this information savely stored.
+
+Proud to bring this to you,
 ~The MyAEGEE team
 ";
 
