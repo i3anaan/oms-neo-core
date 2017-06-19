@@ -8,6 +8,7 @@ use App\Proxies\MicrosoftGraphProxy as OBE;
 class MailProxy
 {
     public function sendLoginDetails($email, $username, $password) {
+        Log::debug("Sending login details email...");
         $mail =
 "Hello,
 Hereby your credential information for MyAEGEE - OMS:
@@ -19,6 +20,7 @@ Please keep this information savely stored.
 ";
 
         $obe = new OBE();
-        $obe->sendEmail($email, "MyAEGEE login information", $mail);
+        $response = $obe->sendEmail($email, "MyAEGEE login information", $mail);
+        Log::debug("Login details email SENT.");
     }
 }

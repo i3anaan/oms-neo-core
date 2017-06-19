@@ -91,6 +91,7 @@ class UserController extends Controller
 
 
         $mailProxy = new MailProxy();
+        $mailProxy->sendLoginDetails($user->personal_email, $user->personal_email, $req->password);
         return response()->success($user, null, 'User created');
     }
 
