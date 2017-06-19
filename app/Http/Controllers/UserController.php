@@ -74,11 +74,6 @@ class UserController extends Controller
         return response()->success($obe->getUsers());
     }
 
-    public function createOBEUser(OBE $obe, $user_id) {
-        $user = User::findOrFail($user_id);
-        return response()->success($obe->createAccountForUser($user));
-    }
-
     public function createUser(CreateUserRequest $req) {
         $arr = $this->getUpdateArray($req, ['address_id', 'first_name', 'last_name', 'date_of_birth', 'personal_email', 'gender', 'phone', 'description', 'password']);
 
@@ -91,8 +86,12 @@ class UserController extends Controller
 
 
         $mailProxy = new MailProxy();
-        $mailProxy->sendLoginDetails($user->personal_email, $user->personal_email, $req->password);
-        return response()->success($user, null, 'User created');
+        $response = $mailProxy->sendLoginDetails($user->personal_email, $user->personal_email, $req->password);
+        if ($response === false) {
+            return response()->failure();
+        } else {
+            return response()->success($user, null, 'User created');
+        }
     }
 
     public function updateUser($user_id, UpdateUserRequest $req) {
@@ -128,7 +127,6 @@ class UserController extends Controller
 
     public function activateUser($user_id, OBE $obe) {
         $user = User::findOrFail($user_id);
-        $currentUser = Auth::user();
 
         if(!empty($user->activated_at)) {
             return response()->failure("User already activated");
@@ -137,7 +135,12 @@ class UserController extends Controller
         $user->seo_url = $user->generateSeoUrl();
         $user->activated_at = date('Y-m-d H:i:s');
 
-        return response()->success($obe->createAccountForUser($user));
+        $response = $obe->createAccountForUser($user);
+        if ($response === false) {
+            return response()->failure();
+        } else {
+            return response()->success(null, null, 'Account activated!');
+        }
     }
 
     public function addUserRoles(Role $role, AddRoleRequest $req) {

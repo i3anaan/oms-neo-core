@@ -13,6 +13,7 @@ use App\Models\User;
 use Log;
 
 use App\Contracts\OnlineBusinessEnvironment as EBO;
+use App\Proxies\MailProxy;
 
 class MicrosoftGraphProxy implements EBO
 {
@@ -40,18 +41,35 @@ class MicrosoftGraphProxy implements EBO
     }
 
     public function createAccountForUser(User $user) {
+        $password = "Aa1!" . str_random(8);
+        $internal_email = $user->getUsernameSlug() . '@member.aegee.eu';
+
+        //Create account.
         $arguments = [
             'accountEnabled'    => true,
             'displayName'       => $user->getDisplayName(),
             'mailNickname'      => $user->getUsernameSlug(),
             'passwordProfile'   => [
-                'password'                      => config('graph.defaultPassword'),
+                'password'                      => $password,
                 'forceChangePasswordNextSignIn' => 'true',
             ],
-            'usageLocation' => 'BE',
-            'userPrincipalName' => $user->getUsernameSlug() . '@aegee.eu',
+            'usageLocation' => 'BE', //TODO
+            'userPrincipalName' => $internal_email,
         ];
-        $this->makePostAPICall('users', $arguments);
+        $response = $this->makePostAPICall('users', $arguments);
+        if ($response === false) {
+            return false;
+        }
+
+        $id = $response->id;
+
+        //Send account information.
+        $response = MailProxy::sendOBELoginDetails($user, $internal_email, $password);
+        if ($response === false) {
+            return false;
+        }
+        
+        //Set license.
         $arguments = [
             'addLicenses' => [
                 [
@@ -61,7 +79,7 @@ class MicrosoftGraphProxy implements EBO
             ],
             'removeLicenses' => [],
         ];
-        return $this->makePostAPICall('users/' . $user->getUsernameSlug() . '@member.aegee.eu' . '/assignLicense', $arguments);
+        return $this->makePostAPICall('users/' . $id . '/assignLicense', $arguments);
     }
 
     public function getUsers() {
@@ -94,7 +112,7 @@ class MicrosoftGraphProxy implements EBO
             Log::error($e);
             Log::error($e->getResponse()->getBody()->getContents());
 
-            return [];
+            return false;
         }
     }
 
