@@ -88,14 +88,14 @@ class UserSeeder extends Seeder
         User::create([
             'address_id'        =>  1,
 			'personal_email' 	=> 	'headoffice@aegee.org',
-			'first_name'		=>	'Big',
-			'last_name'			=>	'Boobs',
+			'first_name'		=>	'Lesława',
+			'last_name'			=>	'Chlebek',
 			'date_of_birth'		=>	'1998-04-16',
 			'gender'			=>	'female',
 			'password'			=>	Hash::make('1234'),
 			'activated_at'		=>	date('Y-m-d H:i:s'),
 			'is_superadmin'		=>	0,
-            'seo_url'           =>  'boobies'
+            'seo_url'           =>  'weeeeeee'
 		]);
 
         BodyMembership::create([
