@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             'BodySeeder',
             'UserSeeder',
             'CircleSeeder',
+            'AgoraSeeder',
         );
     }
 
