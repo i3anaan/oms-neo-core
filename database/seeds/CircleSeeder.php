@@ -21,8 +21,8 @@ class CircleSeeder extends Seeder
 
 
         Circle::create([
-        	'name'			=>	'Shitty people',
-        	'description'	=>	'The official group of shitty people people within AEGEE'
+        	'name'			=>	'People that like pizza hawaii',
+        	'description'	=>	'The official group of people that like pinapple on their pizza'
         ]);
 
 
